@@ -20,7 +20,7 @@ export class Account {
   @JoinColumn({ name: 'userId' })
   user: Partial<User>;
 
-  @Column({ default: 0.0 })
+  @Column('numeric', { default: 0.0 })
   balance: number;
 
   @Column({ default: 'EUR' })

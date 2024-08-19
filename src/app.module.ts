@@ -10,6 +10,7 @@ import { AuthService } from './auth/auth.service';
 import { AccountModule } from './modules/accounts.module';
 import { TransactionModule } from './modules/transactions.module';
 import { CategoryModule } from './modules/categories.module';
+import { AccountsController } from './controllers/accounts.controller';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { CategoryModule } from './modules/categories.module';
     CategoryModule,
     AuthModule,
   ],
-  controllers: [AppController, AuthController],
+  controllers: [AppController, AuthController, AccountsController],
   providers: [AppService, AuthService],
 })
 export class AppModule {}

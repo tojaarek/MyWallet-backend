@@ -51,19 +51,33 @@ export class TransactionsController {
         });
       }
 
-      const { id, date, type, category, description, value, account } =
-        await this.transactionsService.createTransaction(transactionDto);
+      const {
+        id,
+        date,
+        type,
+        category,
+        description,
+        value,
+        currency,
+        account,
+      } = await this.transactionsService.createTransaction(transactionDto);
 
       let newBalance: number;
+      const balance = Number(checkAccount.balance);
+      const transactionValue = Number(value);
 
       switch (type) {
         case 'income':
-          newBalance = checkAccount.balance + value;
+          newBalance = balance + transactionValue;
           break;
         case 'expense':
-          newBalance = checkAccount.balance - value;
+          newBalance = balance - transactionValue;
           break;
+        default:
+          throw new Error('Invalid transaction type');
       }
+
+      newBalance = parseFloat(newBalance.toFixed(2));
 
       const updateBalance: Account = await this.accountsService.updateBalance(
         checkAccount.id,
@@ -81,6 +95,7 @@ export class TransactionsController {
           category,
           description,
           value,
+          currency,
           accountId: account.id,
           accountBalance: updateBalance.balance,
         },
@@ -123,18 +138,21 @@ export class TransactionsController {
       await this.transactionsService.deleteTransaction(transaction);
 
       let newBalance: number;
-      const accountBalance: number = transaction.account.balance;
+      const accountBalance = Number(transaction.account.balance);
+      const transactionValue = Number(transaction.value);
 
       switch (transaction.type) {
         case 'income':
-          newBalance = accountBalance - transaction.value;
+          newBalance = accountBalance - transactionValue;
           break;
         case 'expense':
-          newBalance = accountBalance + transaction.value;
+          newBalance = accountBalance + transactionValue;
           break;
       }
 
       const accountId: number = transaction.account.id;
+
+      newBalance = parseFloat(newBalance.toFixed(2));
 
       const updateBalance: Account = await this.accountsService.updateBalance(
         accountId,

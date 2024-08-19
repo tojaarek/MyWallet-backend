@@ -26,8 +26,11 @@ export class Transaction {
   @Column()
   description: string;
 
-  @Column()
+  @Column('numeric')
   value: number;
+
+  @Column()
+  currency: string;
 
   @ManyToOne(() => Account, (account) => account.transactions)
   @JoinColumn({ name: 'accountId' })

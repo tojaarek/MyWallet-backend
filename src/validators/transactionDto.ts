@@ -1,4 +1,5 @@
-import { IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsNumber, IsString, IsEnum } from 'class-validator';
+import { Column } from 'typeorm';
 import { Account } from 'src/entities/accounts.entity';
 
 export class TransactionDto {
@@ -16,6 +17,9 @@ export class TransactionDto {
 
   @IsNotEmpty()
   value: number;
+
+  @IsNotEmpty()
+  currency: string;
 
   @IsNotEmpty()
   account: Partial<Account>;

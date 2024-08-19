@@ -24,11 +24,23 @@ export class TransactionsService {
     });
   }
 
-  async findUserTransactions(accountId: number): Promise<Transaction[]> {
-    return await this.transactionsRepository.find({
+  async findUserTransactions(
+    accountId: number,
+  ): Promise<Partial<Transaction>[]> {
+    const transactions = await this.transactionsRepository.find({
       where: { account: { id: accountId } },
       relations: ['account', 'account.user'],
     });
+
+    return transactions.map((transaction) => ({
+      id: transaction.id,
+      date: transaction.date,
+      type: transaction.type,
+      category: transaction.category,
+      description: transaction.description,
+      value: transaction.value,
+      currency: transaction.currency,
+    }));
   }
 
   async deleteTransaction(transaction: Transaction): Promise<Transaction> {

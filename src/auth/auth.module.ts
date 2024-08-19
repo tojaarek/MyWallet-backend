@@ -6,11 +6,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './jwt.strategy';
+import { AccountModule } from 'src/modules/accounts.module';
+import { TransactionModule } from 'src/modules/transactions.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot(),
     UsersModule,
+    AccountModule,
+    TransactionModule,
     PassportModule,
     JwtModule.register({
       global: true,

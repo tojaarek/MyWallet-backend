@@ -22,6 +22,36 @@ export class AccountsService {
     });
   }
 
+  async findAccountsByUserId(
+    userId: number,
+  ): Promise<{ id: number; balance: number; currency: string }[]> {
+    const accounts = await this.accountRepository.find({
+      where: { user: { id: userId } },
+      relations: ['user'],
+    });
+
+    return accounts.map(({ id, balance, currency }) => ({
+      id,
+      balance,
+      currency,
+    }));
+  }
+
+  async findMainAccountByUserId(
+    userId: number,
+  ): Promise<{ id: number; balance: number; currency: string } | undefined> {
+    const account = await this.accountRepository.findOne({
+      where: { user: { id: userId }, currency: 'EUR' },
+      relations: ['user'],
+    });
+
+    return {
+      id: account.id,
+      balance: account.balance,
+      currency: account.currency,
+    };
+  }
+
   async updateBalance(
     id: number,
     newBalance: Partial<Account>,
